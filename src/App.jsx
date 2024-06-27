@@ -6,18 +6,16 @@ const App = () => {
   const [coins, setCoins] = useState(0);
 
   useEffect(() => {
-    const tg = window.Telegram.WebApp;
-    setUsername(tg.initDataUnsafe.user.username);
+    if (window.Telegram?.WebApp) {
+      setUsername(window.Telegram.WebApp.initDataUnsafe.user.username);
 
-    axios.get(`/api/user/${tg.initDataUnsafe.user.username}`)
-      .then(response => {
-        if (response.data) {
-          setCoins(response.data.coins);
-        }
-      })
-      .catch(error => {
-        console.error('Error fetching user data:', error);
-      });
+      axios.get(`/api/user/${window.Telegram.WebApp.initDataUnsafe.user.username}`)
+        .then(response => {
+          if (response.data) {
+            setCoins(response.data.coins);
+          }
+        });
+    }
   }, []);
 
   const handleButtonClick = () => {
